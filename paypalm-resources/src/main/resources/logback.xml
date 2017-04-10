@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property resource="logback.properties" />
+
+    <appender name="AppEventsStdOutLogger" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                ${appender.pattern.regexp}
+            </Pattern>
+        </layout>
+    </appender>
+
+    <appender name="AppEventsFileLogger"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${file.appender.file.path}/${file.appender.file.name}.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${file.appender.file.path}/${file.appender.file.name}.%d{yyyy-MM-dd}.%i.log</FileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>${file.appender.max.file.size}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>${file.appender.max.history.days}</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${appender.pattern.regexp}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="${currently.used.appender.log.level}">
+        <!--<appender-ref ref="AppEventsStdOutLogger" />-->
+        <appender-ref ref="${currently.used.appender}" />
+    </root>
+</configuration>

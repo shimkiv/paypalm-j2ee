@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>com.shimkiv</groupId>
+        <artifactId>paypalm</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>paypalm-ear</artifactId>
+    <packaging>ear</packaging>
+
+    <name>PayPalm: EAR module</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.shimkiv</groupId>
+            <artifactId>paypalm-resources</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.shimkiv</groupId>
+            <artifactId>paypalm-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.shimkiv</groupId>
+            <artifactId>paypalm-vo</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.shimkiv</groupId>
+            <artifactId>paypalm-dto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.shimkiv</groupId>
+            <artifactId>paypalm-dao</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.shimkiv</groupId>
+            <artifactId>paypalm-ejb</artifactId>
+            <type>ejb</type>
+        </dependency>
+        <dependency>
+            <groupId>com.shimkiv</groupId>
+            <artifactId>paypalm-web</artifactId>
+            <type>war</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>${maven.ear.plugin.version}</version>
+                <configuration>
+                    <version>${javaee.short.version}</version>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <fileNameMapping>no-version</fileNameMapping>
+                    <skinnyWars>true</skinnyWars>
+                    <modules>
+                        <webModule>
+                            <groupId>com.shimkiv</groupId>
+                            <artifactId>paypalm-web</artifactId>
+                            <contextRoot>/${project.parent.artifactId}</contextRoot>
+                        </webModule>
+                    </modules>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>${maven.wildfly.plugin.version}</version>
+                <configuration>
+                    <filename>${project.artifactId}.ear</filename>
+                    <skip>false</skip>
+                    <reload>true</reload>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <outputDirectory>${user.dir}/target/reports/${project.artifactId}</outputDirectory>
+    </reporting>
+
+    <profiles>
+        <profile>
+            <id>driver</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>${maven.wildfly.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>deploy-paypalm-mysql-driver</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>deploy-artifact</goal>
+                                </goals>
+                                <configuration>
+                                    <force>true</force>
+                                    <groupId>mysql</groupId>
+                                    <artifactId>mysql-connector-java</artifactId>
+                                    <name>${mysql.jdbc.driver.name}</name>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>data-source</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>${maven.wildfly.plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>add-paypalm-datasource</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>add-resource</goal>
+                                </goals>
+                                <configuration>
+                                    <force>true</force>
+                                    <address>subsystem=datasources,data-source=${paypalm.ds.name}</address>
+                                    <resources>
+                                        <resource>
+                                            <properties>
+                                                <jndi-name>java:jboss/datasources/${paypalm.ds.name}</jndi-name>
+                                                <enabled>true</enabled>
+                                                <use-java-context>true</use-java-context>
+                                                <!--suppress MavenModelInspection -->
+                                                <connection-url>${mysql.connection.url}</connection-url>
+                                                <driver-class>${mysql.jdbc.driver}</driver-class>
+                                                <driver-name>${mysql.jdbc.driver.name}</driver-name>
+                                                <!--suppress MavenModelInspection -->
+                                                <user-name>${mysql.user.name}</user-name>
+                                                <!--suppress MavenModelInspection -->
+                                                <password>${mysql.user.password}</password>
+                                            </properties>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

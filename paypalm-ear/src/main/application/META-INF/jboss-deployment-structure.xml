@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-deployment-structure
+        xmlns="urn:jboss:deployment-structure:1.2">
+    <deployment>
+        <exclude-subsystems>
+            <subsystem name="logging" />
+        </exclude-subsystems>
+    </deployment>
+
+    <sub-deployment name="paypalm-ejb.jar">
+        <exclude-subsystems>
+            <subsystem name="logging" />
+        </exclude-subsystems>
+    </sub-deployment>
+    <sub-deployment name="paypalm-web.war">
+        <exclude-subsystems>
+            <subsystem name="logging" />
+        </exclude-subsystems>
+    </sub-deployment>
+</jboss-deployment-structure>

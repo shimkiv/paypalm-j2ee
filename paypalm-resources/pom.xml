@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.shimkiv</groupId>
+        <artifactId>paypalm</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>paypalm-resources</artifactId>
+    <packaging>jar</packaging>
+
+    <name>PayPalm: RESOURCES module</name>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+    </build>
+
+    <reporting>
+        <outputDirectory>${user.dir}/target/reports/${project.artifactId}</outputDirectory>
+    </reporting>
+
+    <profiles>
+        <profile>
+            <id>schema</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>sql-maven-plugin</artifactId>
+                        <version>${maven.sql.plugin.version}</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>mysql</groupId>
+                                <artifactId>mysql-connector-java</artifactId>
+                                <version>${mysql.connector.version}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>drop-and-create-paypalm-schema</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>execute</goal>
+                                </goals>
+                                <configuration>
+                                    <driver>${mysql.jdbc.driver}</driver>
+                                    <!--suppress MavenModelInspection -->
+                                    <url>${mysql.connection.url}</url>
+                                    <!--suppress MavenModelInspection -->
+                                    <username>${mysql.user.name}</username>
+                                    <!--suppress MavenModelInspection -->
+                                    <password>${mysql.user.password}</password>
+                                    <skip>false</skip>
+                                    <autocommit>true</autocommit>
+                                    <onError>abort</onError>
+                                    <srcFiles>
+                                        <srcFile>${project.basedir}/src/main/resources/sql/database.sql</srcFile>
+                                    </srcFiles>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>

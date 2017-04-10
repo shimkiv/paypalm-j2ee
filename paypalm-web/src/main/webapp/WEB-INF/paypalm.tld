@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+    <description>PayPalm Tags</description>
+    <display-name>PayPalm Tags</display-name>
+    <tlib-version>1.0</tlib-version>
+    <short-name>PayPalmTags</short-name>
+    <uri>/paypalm</uri>
+    
+    <tag>
+        <name>generateUniqueRef</name>
+        <tag-class>com.shimkiv.paypalm.jsp.tld.IdToUniqueRef</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>decryptAndMask</name>
+        <tag-class>com.shimkiv.paypalm.jsp.tld.DecryptAndMask</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>toMask</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>lastShown</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>mask</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+</taglib>
