@@ -55,7 +55,7 @@ _Optional steps:_
 * Better DB schema structure
     * Better DB normalization
     * More entities (like cards, currencies, countries, etc.)
-    * JPA entities lazy initialization (e.g.: [_OpenEntityManagerInViewFilter_](http://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/orm/jpa/support/OpenEntityManagerInViewFilter.html))
+    * JPA entities lazy initialization (e.g. by utilizing the ``JOIN FETCH`` query)
 * Full compliance with the PCI DSS
 * Automated tests (like Arquillian in-container tests)
 * PayPal simulator (to use it during development)
